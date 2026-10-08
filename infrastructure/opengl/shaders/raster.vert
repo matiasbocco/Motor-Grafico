@@ -2,14 +2,18 @@
 
 in vec3 in_position;
 in vec2 in_uv;
+in vec3 in_normal;
 
 uniform mat4 u_model;
 uniform mat4 u_view_projection;
+uniform mat3 u_normal_matrix;
 uniform float u_uv_scale;
 
+out vec3 v_normal;
 out vec2 v_uv;
 
 void main() {
+    v_normal = u_normal_matrix * in_normal;
     v_uv = in_uv * u_uv_scale;
     gl_Position = u_view_projection * u_model * vec4(in_position, 1.0);
 }

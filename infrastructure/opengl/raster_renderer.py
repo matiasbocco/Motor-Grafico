@@ -1,4 +1,5 @@
 import moderngl
+from pyglm import glm
 
 from domain.entity import Entity
 from domain.scene import Scene
@@ -26,12 +27,17 @@ class RasterRenderer:
         camera = scene.camera
         self._program["u_view_projection"].write(camera.projection_matrix() * camera.view_matrix())
         self._program["u_base_color_map"] = BASE_COLOR_UNIT
+        self._program["u_to_light"].write(scene.light.to_light())
+        self._program["u_light_color"].write(scene.light.color)
+        self._program["u_ambient"] = scene.light.ambient
         for entity in scene.entities:
             self._draw(entity)
 
     def _draw(self, entity: Entity) -> None:
         material = entity.material
-        self._program["u_model"].write(entity.transform.model_matrix())
+        model = entity.transform.model_matrix()
+        self._program["u_model"].write(model)
+        self._program["u_normal_matrix"].write(glm.transpose(glm.inverse(glm.mat3(model))))
         self._program["u_color"].write(material.color)
         self._program["u_uv_scale"] = material.uv_scale
         self._textures.texture(material.base_color_map, "base").use(location=BASE_COLOR_UNIT)
