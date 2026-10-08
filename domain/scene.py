@@ -17,3 +17,7 @@ class Scene:
             raise ValueError(f"An entity named '{entity.name}' already exists")
         self.entities.append(entity)
         return entity
+
+    def update(self, delta_seconds: float) -> None:
+        for entity in self.entities:
+            entity.update(delta_seconds)
