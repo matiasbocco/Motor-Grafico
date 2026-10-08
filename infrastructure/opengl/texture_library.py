@@ -5,6 +5,7 @@ import pyglet
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 WHITE_TEXEL = bytes((255, 255, 255, 255))
+FLAT_NORMAL_TEXEL = bytes((128, 128, 255, 255))
 
 
 class TextureLibrary:
@@ -15,6 +16,7 @@ class TextureLibrary:
         self._textures: dict[str, moderngl.Texture] = {}
         self._defaults = {
             "base": self._solid_texture(WHITE_TEXEL),
+            "normal": self._solid_texture(FLAT_NORMAL_TEXEL),
         }
 
     def texture(self, relative_path: str | None, kind: str) -> moderngl.Texture:

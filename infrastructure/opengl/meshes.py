@@ -4,8 +4,8 @@ from pyglm import glm
 
 from domain.shapes import Box, Rect, Shape
 
-VERTEX_FORMAT = "3f 3f 2f"
-VERTEX_ATTRIBUTES = ("in_position", "in_normal", "in_uv")
+VERTEX_FORMAT = "3f 3f 2f 3f"
+VERTEX_ATTRIBUTES = ("in_position", "in_normal", "in_uv", "in_tangent")
 
 # Each face is described by its normal (where it looks) and its tangent (where u grows).
 # The bitangent, where v grows, is cross(normal, tangent).
@@ -36,7 +36,7 @@ def _build_faces(faces: tuple[tuple[glm.vec3, glm.vec3], ...], face_offset: floa
         for s, t in FACE_CORNERS:
             position = normal * face_offset + tangent * s + bitangent * t
             uv = glm.vec2(s, t) * 0.5 + 0.5
-            vertex_values.extend((*position, *normal, *uv))
+            vertex_values.extend((*position, *normal, *uv, *tangent))
         first = face_index * 4
         index_values.extend((first, first + 1, first + 2, first + 2, first + 3, first))
     return MeshData(

@@ -9,6 +9,7 @@ from infrastructure.opengl.shader_loader import load_program
 from infrastructure.opengl.texture_library import TextureLibrary
 
 BASE_COLOR_UNIT = 0
+NORMAL_MAP_UNIT = 1
 
 
 class RasterRenderer:
@@ -28,6 +29,7 @@ class RasterRenderer:
         self._program["u_camera_position"].write(camera.position)
         self._program["u_view_projection"].write(camera.projection_matrix() * camera.view_matrix())
         self._program["u_base_color_map"] = BASE_COLOR_UNIT
+        self._program["u_normal_map"] = NORMAL_MAP_UNIT
         self._program["u_to_light"].write(scene.light.to_light())
         self._program["u_light_color"].write(scene.light.color)
         self._program["u_ambient"] = scene.light.ambient
@@ -43,6 +45,7 @@ class RasterRenderer:
         self._program["u_uv_scale"] = material.uv_scale
         self._program["u_shininess"] = material.shininess
         self._textures.texture(material.base_color_map, "base").use(location=BASE_COLOR_UNIT)
+        self._textures.texture(material.normal_map, "normal").use(location=NORMAL_MAP_UNIT)
         self._vertex_array_for(entity.shape).render()
 
     def _vertex_array_for(self, shape: Shape) -> moderngl.VertexArray:
