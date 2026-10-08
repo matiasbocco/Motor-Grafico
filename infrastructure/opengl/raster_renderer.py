@@ -33,6 +33,7 @@ class RasterRenderer:
         material = entity.material
         self._program["u_model"].write(entity.transform.model_matrix())
         self._program["u_color"].write(material.color)
+        self._program["u_uv_scale"] = material.uv_scale
         self._textures.texture(material.base_color_map, "base").use(location=BASE_COLOR_UNIT)
         self._vertex_array_for(entity.shape).render()
 
