@@ -27,7 +27,10 @@ class TextureLibrary:
     def _load(self, relative_path: str) -> moderngl.Texture:
         image = pyglet.image.load(str(PROJECT_ROOT / relative_path)).get_image_data()
         data = image.get_data("RGBA", image.width * 4)
-        return self._context.texture((image.width, image.height), 4, data)
+        texture = self._context.texture((image.width, image.height), 4, data)
+        texture.build_mipmaps()
+        texture.filter = (moderngl.LINEAR_MIPMAP_LINEAR, moderngl.LINEAR)
+        return texture
 
     def _solid_texture(self, texel: bytes) -> moderngl.Texture:
         return self._context.texture((1, 1), 4, texel)
