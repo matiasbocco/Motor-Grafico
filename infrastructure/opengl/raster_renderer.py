@@ -25,6 +25,7 @@ class RasterRenderer:
     def render(self, scene: Scene) -> None:
         self._context.clear(*scene.background_color)
         camera = scene.camera
+        self._program["u_camera_position"].write(camera.position)
         self._program["u_view_projection"].write(camera.projection_matrix() * camera.view_matrix())
         self._program["u_base_color_map"] = BASE_COLOR_UNIT
         self._program["u_to_light"].write(scene.light.to_light())
@@ -40,6 +41,7 @@ class RasterRenderer:
         self._program["u_normal_matrix"].write(glm.transpose(glm.inverse(glm.mat3(model))))
         self._program["u_color"].write(material.color)
         self._program["u_uv_scale"] = material.uv_scale
+        self._program["u_shininess"] = material.shininess
         self._textures.texture(material.base_color_map, "base").use(location=BASE_COLOR_UNIT)
         self._vertex_array_for(entity.shape).render()
 
