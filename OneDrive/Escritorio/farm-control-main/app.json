@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "253ed5e7-a17b-4a64-8dfd-f3e7f59a5fae"
+      }
+    },
+    "android": {
+      "package": "com.franreinaudo.farmcontrol"
+    }
+  }
+}
