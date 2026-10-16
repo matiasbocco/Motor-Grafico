@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "927200988594",
+    "project_id": "farm-control-251c3",
+    "storage_bucket": "farm-control-251c3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:927200988594:android:22cfa96ce1dc711366a8ab",
+        "android_client_info": {
+          "package_name": "com.franreinaudo.farmcontrol"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApP5FfdzAEBec2w6pNQmVjLww12AYv2jw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
