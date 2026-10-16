@@ -1,5 +1,6 @@
 import moderngl
 import pyglet
+from pyglet.window import mouse
 
 from domain.renderer import Renderer
 from domain.scene import Scene
@@ -34,3 +35,10 @@ class Window(pyglet.window.Window):
 
     def _update(self, delta_seconds: float) -> None:
         self._scene.update(delta_seconds)
+
+    def on_mouse_press(self, x: int, y: int, button: int, modifiers: int) -> None:
+        if button != mouse.LEFT:
+            return
+        # Pyglet mide el mouse en píxeles desde la esquina inferior izquierda, igual que la v de la cámara.
+        ray = self._scene.camera.ray_through(x / self.width, y / self.height)
+        print(ray)
