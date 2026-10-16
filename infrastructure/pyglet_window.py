@@ -14,10 +14,12 @@ class Window(pyglet.window.Window):
         self.gl_context = moderngl.create_context()
         self._scene: Scene | None = None
         self._renderer: Renderer | None = None
+        self._overlay: Renderer | None = None
 
-    def run(self, scene: Scene, renderer: Renderer) -> None:
+    def run(self, scene: Scene, renderer: Renderer, overlay: Renderer) -> None:
         self._scene = scene
         self._renderer = renderer
+        self._overlay = overlay
         self.on_resize(self.width, self.height)
         pyglet.clock.schedule_interval(self._update, 1.0 / UPDATES_PER_SECOND)
         pyglet.app.run()
@@ -32,6 +34,7 @@ class Window(pyglet.window.Window):
     def on_draw(self) -> None:
         if self._renderer is not None:
             self._renderer.render(self._scene)
+            self._overlay.render(self._scene)
 
     def _update(self, delta_seconds: float) -> None:
         self._scene.update(delta_seconds)
