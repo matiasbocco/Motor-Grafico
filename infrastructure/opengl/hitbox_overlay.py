@@ -2,7 +2,6 @@ import moderngl
 from pyglm import glm
 
 from domain.entity import Entity
-from domain.intersections import world_aabb
 from domain.scene import Scene
 from domain.shapes import Box, Rect, Shape
 from infrastructure.opengl.shader_loader import load_program
@@ -65,8 +64,5 @@ class HitboxOverlay:
 
     @staticmethod
     def _hitbox_matrix(entity: Entity) -> glm.mat4:
-        """Matriz que lleva la forma local (de -1 a 1) hasta el hitbox AABB de la entidad."""
-        box_min, box_max = world_aabb(entity)
-        center = (box_min + box_max) * 0.5
-        half_size = (box_max - box_min) * 0.5
-        return glm.scale(glm.translate(glm.mat4(1.0), center), half_size)
+        """Matriz que lleva la forma local (de -1 a 1) hasta el hitbox OBB de la entidad."""
+        return entity.transform.model_matrix()
