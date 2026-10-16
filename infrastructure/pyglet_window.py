@@ -41,4 +41,10 @@ class Window(pyglet.window.Window):
             return
         # Pyglet mide el mouse en píxeles desde la esquina inferior izquierda, igual que la v de la cámara.
         ray = self._scene.camera.ray_through(x / self.width, y / self.height)
-        print(ray)
+        found = self._scene.pick(ray)
+        if found is None:
+            print("Nada bajo el cursor")
+            return
+        entity, hit = found
+        entity.show_hitbox = not entity.show_hitbox
+        print(f"Hit: {entity.name} a {hit.distance:.2f} unidades")
