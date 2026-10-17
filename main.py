@@ -1,16 +1,31 @@
 from demo_scene import build_scene
 from domain.renderer import Renderer
+from domain.scene import Scene
 from infrastructure.opengl.cpu_raytrace_renderer import CpuRaytraceRenderer
+from infrastructure.opengl.gpu_raytrace_renderer import ComputeRaytraceRenderer, FragmentRaytraceRenderer
 from infrastructure.opengl.hitbox_overlay import HitboxOverlay
 from infrastructure.opengl.raster_renderer import RasterRenderer
 from infrastructure.opengl.texture_library import TextureLibrary
 from infrastructure.pyglet_window import Window
 
 WIDTH, HEIGHT = 800, 600
-SCENE_TYPE = "cpu"  # "raster" o "cpu"
+SCENE_TYPE = "gpu"  # "raster", "cpu" o "gpu"
+COMPUTE_SHADER_VERSION = 430
 
 
-def create_renderer(window: Window) -> Renderer:
+def create_gpu_renderer(window: Window, scene: Scene) -> Renderer:
+    """Compute shader si la placa lo soporta (OpenGL 4.3); si no, fragment shader (macOS)."""
+    context = window.gl_context
+    textures = TextureLibrary(context)
+    if context.version_code >= COMPUTE_SHADER_VERSION:
+        return ComputeRaytraceRenderer(context, textures, scene)
+    print(f"OpenGL {context.version_code} no tiene compute shaders: usamos el fragment shader.")
+    return FragmentRaytraceRenderer(context, textures, scene)
+
+
+def create_renderer(window: Window, scene: Scene) -> Renderer:
+    if SCENE_TYPE == "gpu":
+        return create_gpu_renderer(window, scene)
     if SCENE_TYPE == "cpu":
         return CpuRaytraceRenderer(window.gl_context)
     return RasterRenderer(window.gl_context, TextureLibrary(window.gl_context))
@@ -19,7 +34,7 @@ def create_renderer(window: Window) -> Renderer:
 def main() -> None:
     window = Window(WIDTH, HEIGHT, "Bocco Matias")
     scene = build_scene(WIDTH / HEIGHT)
-    renderer = create_renderer(window)
+    renderer = create_renderer(window, scene)
     overlay = HitboxOverlay(window.gl_context)
     window.run(scene, renderer, overlay)
 
