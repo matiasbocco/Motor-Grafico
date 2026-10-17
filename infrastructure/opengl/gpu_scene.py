@@ -12,6 +12,7 @@ MAX_OBJECTS = 32
 SHAPE_BOX, SHAPE_RECT = 0, 1
 OBJECT_SIZE = 176  # bytes: mat4 + mat4 + 3 vec4 = 64 + 64 + 48
 TEXTURE_ARRAY_UNIT = 1
+MAX_BOUNCES = 2
 
 ShaderProgram = moderngl.Program | moderngl.ComputeShader
 
@@ -62,6 +63,7 @@ class GpuScene:
             "u_to_light": scene.light.to_light(),
             "u_light_color": scene.light.color,
             "u_ambient": scene.light.ambient,
+            "u_max_bounces": MAX_BOUNCES,
         })
 
     @staticmethod
