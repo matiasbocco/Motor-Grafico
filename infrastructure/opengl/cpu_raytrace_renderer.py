@@ -43,7 +43,10 @@ class CpuRaytraceRenderer:
         if found is None:
             return scene.sky.color_for(ray.direction)
         entity, hit = found
-        diffuse = max(glm.dot(hit.normal, scene.light.to_light()), 0.0)
+        to_light = scene.light.to_light()
+        shadow_ray = Ray(hit.point + hit.normal * SURFACE_OFFSET, to_light)
+        visibility = 0.0 if closest_hit(shadow_ray, scene.entities) else 1.0
+        diffuse = max(glm.dot(hit.normal, to_light), 0.0) * visibility
         return entity.material.color * (scene.light.ambient + diffuse * scene.light.color)
 
     def render(self, scene: Scene) -> None:
