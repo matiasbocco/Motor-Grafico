@@ -59,6 +59,9 @@ class GpuScene:
             "u_aspect_ratio": aspect_ratio,
             "u_sky_top": scene.sky.top,
             "u_sky_bottom": scene.sky.bottom,
+            "u_to_light": scene.light.to_light(),
+            "u_light_color": scene.light.color,
+            "u_ambient": scene.light.ambient,
         })
 
     @staticmethod
